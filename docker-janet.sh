@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOCKER_REPO=leafgarland
+DOCKER_REPO=tionis
 
 LAST_COMMIT=$(<last_commit.txt)
 CURRENT_COMMIT=$(curl -L -s -H 'Accept: application/json' https://api.github.com/repos/janet-lang/janet/branches/master | jq -j .commit.sha)
@@ -54,7 +54,7 @@ else
     fi
 fi
 
-echo $DOCKER_PASSWORD | docker login -u leafgarland --password-stdin
+echo $DOCKER_PASSWORD | docker login -u tionis --password-stdin
 docker push $DOCKER_REPO/janet
 docker push $DOCKER_REPO/janet-sdk
 
