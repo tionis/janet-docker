@@ -1,5 +1,5 @@
 FROM alpine:3.12 as alpine-dev
-RUN apk add --no-cache gcc musl-dev make git
+RUN apk add --no-cache gcc musl-dev make git openssh git-lfs
 
 FROM alpine-dev as build
 WORKDIR /build
@@ -27,7 +27,7 @@ WORKDIR /app
 CMD ["ash"] 
 
 FROM alpine as core
-RUN apk add --no-cache gcc musl-dev make git bash
+RUN apk add --no-cache gcc musl-dev make git bash openssh git-lfs
 COPY --from=build /app/ /app/
 ENV PATH="/app/bin:$PATH"
 WORKDIR /app
