@@ -11,15 +11,18 @@ DATE=$(date '+%Y-%m-%dT%H:%M:%S')
 function docker-build () {
     TAGNAME=$1
     COMMIT=$2
+    JPM_COMMIT=$3
     echo "Building with TAGNAME=$TAGNAME and COMMIT=$COMMIT"
 
     docker build . --target=core --tag $DOCKER_REPO/janet:$TAGNAME \
         --build-arg "COMMIT=$COMMIT" \
+        --build-arg "JPM_COMMIT=$JPM_COMMIT" \
         --label "org.opencontainers.image.revision=$COMMIT" \
         --label "org.opencontainers.image.created=$DATE" \
         --label "org.opencontainers.image.source=https://github.com/janet-lang/janet"
     docker build . --target=dev --tag $DOCKER_REPO/janet-sdk:$TAGNAME \
         --build-arg "COMMIT=$COMMIT" \
+        --build-arg "JPM_COMMIT=$JPM_COMMIT" \
         --label "org.opencontainers.image.revision=$COMMIT" \
         --label "org.opencontainers.image.created=$DATE" \
         --label "org.opencontainers.image.source=https://github.com/janet-lang/janet"
@@ -31,7 +34,7 @@ if [ "$LAST_COMMIT" == "$CURRENT_COMMIT" ]; then
 fi
 
 echo "Building image for latest commit $CURRENT_COMMIT, last commit was $LAST_COMMIT"
-docker-build latest $CURRENT_COMMIT
+docker-build latest $CURRENT_COMMIT $HEAD
 
 LAST_TAG=$(<last_tag.txt)
 CURRENT_TAG=$(curl -L -s -H 'Accept: application/json' https://api.github.com/repos/janet-lang/janet/tags | jq -j .[0].name)
