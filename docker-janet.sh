@@ -13,14 +13,15 @@ function docker-build () {
     COMMIT=$2
     JPM_COMMIT=$3
     echo "Building with TAGNAME=$TAGNAME and COMMIT=$COMMIT"
+    PLATFORMS="linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6"
 
-    docker build . --target=core --tag $DOCKER_REPO/janet:$TAGNAME \
+    docker buildx build --platform "$PLATFORMS" . --target=core --tag $DOCKER_REPO/janet:$TAGNAME \
         --build-arg "COMMIT=$COMMIT" \
         --build-arg "JPM_COMMIT=$JPM_COMMIT" \
         --label "org.opencontainers.image.revision=$COMMIT" \
         --label "org.opencontainers.image.created=$DATE" \
         --label "org.opencontainers.image.source=https://github.com/janet-lang/janet"
-    docker build . --target=dev --tag $DOCKER_REPO/janet-sdk:$TAGNAME \
+    docker buildx build --platform "$PLATFORMS" . --target=dev --tag $DOCKER_REPO/janet-sdk:$TAGNAME \
         --build-arg "COMMIT=$COMMIT" \
         --build-arg "JPM_COMMIT=$JPM_COMMIT" \
         --label "org.opencontainers.image.revision=$COMMIT" \
