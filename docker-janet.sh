@@ -8,8 +8,6 @@ CURRENT_COMMIT=$(curl -L -s -H 'Accept: application/json' https://api.github.com
 #REVISION="$CURRENT_COMMIT"
 DATE=$(date '+%Y-%m-%dT%H:%M:%S')
 
-echo "$DOCKER_PASSWORD" | docker login -u tionis --password-stdin
-
 function docker-build () {
     TAGNAME=$1
     COMMIT=$2
@@ -57,6 +55,7 @@ else
     fi
 fi
 
+echo "$DOCKER_PASSWORD" | docker login -u tionis --password-stdin
 docker push $DOCKER_REPO/janet
 docker push $DOCKER_REPO/janet-sdk
 
