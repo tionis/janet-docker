@@ -8,12 +8,15 @@ CURRENT_COMMIT=$(curl -L -s -H 'Accept: application/json' https://api.github.com
 REVISION="$CURRENT_COMMIT"
 DATE=$(date '+%Y-%m-%dT%H:%M:%S')
 
+echo $DOCKER_PASSWORD | docker login -u tionis --password-stdin
+
 function docker-build () {
     TAGNAME=$1
     COMMIT=$2
     JPM_COMMIT=$3
     echo "Building with TAGNAME=$TAGNAME and COMMIT=$COMMIT"
-    PLATFORMS="linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6"
+    #PLATFORMS="linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6"
+	PLATFORM="linux/amd64"
 
     docker buildx build --platform "$PLATFORMS" . --target=core --tag $DOCKER_REPO/janet:$TAGNAME \
         --build-arg "COMMIT=$COMMIT" \
@@ -35,7 +38,7 @@ if [ "$LAST_COMMIT" == "$CURRENT_COMMIT" ]; then
 fi
 
 echo "Building image for latest commit $CURRENT_COMMIT, last commit was $LAST_COMMIT"
-docker-build latest $CURRENT_COMMIT $HEAD
+docker-build latest "$CURRENT_COMMIT" "$HEAD"
 
 LAST_TAG=$(<last_tag.txt)
 CURRENT_TAG=$(curl -L -s -H 'Accept: application/json' https://api.github.com/repos/janet-lang/janet/tags | jq -j .[0].name)
@@ -55,7 +58,6 @@ else
     fi
 fi
 
-echo $DOCKER_PASSWORD | docker login -u tionis --password-stdin
 docker push $DOCKER_REPO/janet
 docker push $DOCKER_REPO/janet-sdk
 
