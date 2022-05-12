@@ -13,10 +13,10 @@ function docker-build () {
     COMMIT=$2
     JPM_COMMIT=$3
     echo "Building with TAGNAME=$TAGNAME and COMMIT=$COMMIT"
-    PLATFORMS="linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6"
+    #PLATFORMS="linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6"
+	PLATFORMS="linux/amd64"
 
     docker buildx build --platform "$PLATFORMS" . --target=core --tag "$DOCKER_REPO"/janet:"$TAGNAME" \
-
         --build-arg "COMMIT=$COMMIT" \
         --build-arg "JPM_COMMIT=$JPM_COMMIT" \
         --label "org.opencontainers.image.revision=$COMMIT" \
