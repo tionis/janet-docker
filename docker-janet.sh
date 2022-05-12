@@ -16,13 +16,13 @@ function docker-build () {
     #PLATFORMS="linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6"
 	PLATFORMS="linux/amd64"
 
-    docker buildx build --platform "$PLATFORMS" . --target=core --tag "$DOCKER_REPO"/janet:"$TAGNAME" \
+    docker buildx build --platform "$PLATFORMS" . --push --target=core --tag "$DOCKER_REPO"/janet:"$TAGNAME" \
         --build-arg "COMMIT=$COMMIT" \
         --build-arg "JPM_COMMIT=$JPM_COMMIT" \
         --label "org.opencontainers.image.revision=$COMMIT" \
         --label "org.opencontainers.image.created=$DATE" \
         --label "org.opencontainers.image.source=https://github.com/janet-lang/janet"
-    docker buildx build --platform "$PLATFORMS" . --target=dev --tag "$DOCKER_REPO"/janet-sdk:"$TAGNAME" \
+    docker buildx build --platform "$PLATFORMS" . --push --target=dev --tag "$DOCKER_REPO"/janet-sdk:"$TAGNAME" \
         --build-arg "COMMIT=$COMMIT" \
         --build-arg "JPM_COMMIT=$JPM_COMMIT" \
         --label "org.opencontainers.image.revision=$COMMIT" \
@@ -35,6 +35,7 @@ if [ "$LAST_COMMIT" == "$CURRENT_COMMIT" ]; then
     exit 0
 fi
 
+echo "$DOCKER_PASSWORD" | docker login -u tionis --password-stdin
 echo "Building image for latest commit $CURRENT_COMMIT, last commit was $LAST_COMMIT"
 docker-build latest "$CURRENT_COMMIT" "$HEAD"
 
@@ -56,9 +57,8 @@ else
     fi
 fi
 
-echo "$DOCKER_PASSWORD" | docker login -u tionis --password-stdin
-docker push $DOCKER_REPO/janet:latest
-docker push $DOCKER_REPO/janet-sdk:latest
+#docker push $DOCKER_REPO/janet:latest
+#docker push $DOCKER_REPO/janet-sdk:latest
 
 echo "$CURRENT_COMMIT" > last_commit.txt
 echo "$CURRENT_TAG" > last_tag.txt
