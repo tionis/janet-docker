@@ -16,6 +16,7 @@ function docker-build () {
     PLATFORMS="linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6"
 
     docker buildx build --platform "$PLATFORMS" . --target=core --tag "$DOCKER_REPO"/janet:"$TAGNAME" \
+
         --build-arg "COMMIT=$COMMIT" \
         --build-arg "JPM_COMMIT=$JPM_COMMIT" \
         --label "org.opencontainers.image.revision=$COMMIT" \
@@ -56,8 +57,8 @@ else
 fi
 
 echo "$DOCKER_PASSWORD" | docker login -u tionis --password-stdin
-docker push $DOCKER_REPO/janet
-docker push $DOCKER_REPO/janet-sdk
+docker push $DOCKER_REPO/janet:latest
+docker push $DOCKER_REPO/janet-sdk:latest
 
 echo "$CURRENT_COMMIT" > last_commit.txt
 echo "$CURRENT_TAG" > last_tag.txt
