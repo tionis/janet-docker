@@ -13,8 +13,8 @@ function docker-build () {
     COMMIT=$2
     JPM_COMMIT=$3
     echo "Building with TAGNAME=$TAGNAME and COMMIT=$COMMIT"
-    #PLATFORMS="linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6"
-	PLATFORMS="linux/amd64"
+    PLATFORMS="linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6"
+	#PLATFORMS="linux/amd64"
 
     docker buildx build --platform "$PLATFORMS" . --push --target=core --tag "$DOCKER_REPO"/janet:"$TAGNAME" \
         --build-arg "COMMIT=$COMMIT" \
@@ -42,20 +42,20 @@ docker-build latest "$CURRENT_COMMIT" "$HEAD"
 LAST_TAG=$(<last_tag.txt)
 CURRENT_TAG=$(curl -L -s -H 'Accept: application/json' https://api.github.com/repos/janet-lang/janet/tags | jq -j .[0].name)
 
-if [ "$LAST_TAG" == "$CURRENT_TAG" ]; then
-    echo "No new tags since $CURRENT_TAG"
-else
-    CURRENT_TAG_COMMIT=$(curl -L -s -H 'Accept: application/json' https://api.github.com/repos/janet-lang/janet/tags | jq -j .[0].commit.sha)
-
-    if [ "$CURRENT_TAG_COMMIT" == "$CURRENT_COMMIT" ]; then
-        echo "Tagging image for latest tag $CURRENT_TAG, last tag was $LAST_TAG"
-        docker tag "$DOCKER_REPO/janet:latest" "$DOCKER_REPO/janet:$CURRENT_TAG"
-        docker tag "$DOCKER_REPO/janet-sdk:latest" "$DOCKER_REPO/janet-sdk:$CURRENT_TAG"
-    else
-        echo "Building new image for $CURRENT_TAG at commit $CURRENT_TAG_COMMIT"
-        docker-build "$CURRENT_TAG" "$CURRENT_TAG_COMMIT"
-    fi
-fi
+#if [ "$LAST_TAG" == "$CURRENT_TAG" ]; then
+#    echo "No new tags since $CURRENT_TAG"
+#else
+#    CURRENT_TAG_COMMIT=$(curl -L -s -H 'Accept: application/json' https://api.github.com/repos/janet-lang/janet/tags | jq -j .[0].commit.sha)
+#
+#    if [ "$CURRENT_TAG_COMMIT" == "$CURRENT_COMMIT" ]; then
+#        echo "Tagging image for latest tag $CURRENT_TAG, last tag was $LAST_TAG"
+#        docker tag "$DOCKER_REPO/janet:latest" "$DOCKER_REPO/janet:$CURRENT_TAG"
+#        docker tag "$DOCKER_REPO/janet-sdk:latest" "$DOCKER_REPO/janet-sdk:$CURRENT_TAG"
+#    else
+#        echo "Building new image for $CURRENT_TAG at commit $CURRENT_TAG_COMMIT"
+#        docker-build "$CURRENT_TAG" "$CURRENT_TAG_COMMIT"
+#    fi
+#fi
 
 #docker push $DOCKER_REPO/janet:latest
 #docker push $DOCKER_REPO/janet-sdk:latest
