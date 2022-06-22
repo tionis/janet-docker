@@ -31,4 +31,10 @@ RUN apk add --no-cache gcc musl-dev make git bash openssh git-lfs
 COPY --from=build /app/ /app/
 ENV PATH="/app/bin:$PATH"
 WORKDIR /app
+RUN jpm install https://github.com/janet-lang/spork
+RUN jpm install https://github.com/janet-lang/sqlite
+RUN jpm install https://github.com/janet-lang/jhydro
+RUN jpm install https://github.com/janet-lang/circlet
+RUN jpm install https://github.com/pyrmont/remarkable
+RUN jpm install https://tasadar.net/tionis/std-ext.janet
 CMD ["janet"] 
