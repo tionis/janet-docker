@@ -32,7 +32,7 @@ COPY --from=build /app/ /app/
 ENV PATH="/app/bin:$PATH"
 WORKDIR /app
 RUN jpm install https://github.com/janet-lang/spork
-RUN jpm install https://github.com/janet-lang/sqlite
+RUN jpm install https://github.com/janet-lang/sqlite3
 RUN jpm install https://github.com/janet-lang/jhydro
 RUN jpm install https://github.com/janet-lang/circlet
 RUN jpm install https://github.com/pyrmont/remarkable
