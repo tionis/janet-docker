@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -euxo pipefail
 DOCKER_REPO=tionis
 
 LAST_COMMIT=$(<last_commit.txt)
@@ -13,8 +13,8 @@ function docker-build () {
     COMMIT=$2
     JPM_COMMIT=$3
     echo "Building with TAGNAME=$TAGNAME and COMMIT=$COMMIT"
-    PLATFORMS="linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6"
-	#PLATFORMS="linux/amd64"
+    #PLATFORMS="linux/amd64,linux/386,linux/arm64,linux/arm/v7,linux/arm/v6"
+    PLATFORMS="linux/amd64"
 
     docker buildx build --platform "$PLATFORMS" . --push --target=core --tag "$DOCKER_REPO"/janet:"$TAGNAME" \
         --build-arg "COMMIT=$COMMIT" \
