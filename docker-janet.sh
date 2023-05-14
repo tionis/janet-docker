@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euxo pipefail
+set -exo pipefail
 DOCKER_REPO=tionis
 
 LAST_COMMIT=$(<last_commit.txt)
