@@ -36,5 +36,5 @@ RUN jpm install https://github.com/janet-lang/sqlite3
 RUN jpm install https://github.com/janet-lang/jhydro
 RUN jpm install https://github.com/janet-lang/circlet
 RUN jpm install https://github.com/pyrmont/remarkable
-RUN jpm install https://tasadar.net/tionis/std-ext.janet
+RUN jpm install https://tasadar.net/tionis/toolbox
 CMD ["janet"] 
