@@ -35,6 +35,16 @@ RUN jpm install https://github.com/janet-lang/spork
 RUN jpm install https://github.com/janet-lang/sqlite3
 RUN jpm install https://github.com/janet-lang/jhydro
 RUN jpm install https://github.com/janet-lang/circlet
-RUN jpm install https://github.com/pyrmont/remarkable
-RUN jpm install https://tasadar.net/tionis/toolbox
+RUN jpm install https://github.com/CosmicToast/jurl
+RUN jpm install https://github.com/tionis/toolbox
+RUN jpm install https://github.com/andrewchambers/janet-uri
+RUN jpm install https://github.com/andrewchambers/janet-flock
+RUN jpm install https://github.com/MorganPeterson/jermbox
+RUN jpm install https://github.com/andrewchambers/janet-big
+RUN jpm install https://github.com/tionis/remarkable
+RUN jpm install https://github.com/joy-framework/uuid
+RUN jpm install https://git.sr.ht/~pepe/chidi/
+RUN jpm install https://git.sr.ht/~pepe/gp/
+RUN jpm install https://github.com/MorganPeterson/jermbox
+RUN jpm install https://github.com/tionis/jeff
 CMD ["janet"] 
