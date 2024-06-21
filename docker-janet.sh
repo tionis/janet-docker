@@ -35,11 +35,15 @@ if [ "$LAST_COMMIT" == "$CURRENT_COMMIT" ]; then
     exit 0
 fi
 
-echo "$DOCKER_PASSWORD" | docker login -u tionis --password-stdin
+if test -n "${DOCKER_PASSWORD:-}"; then
+    echo "$DOCKER_PASSWORD" | docker login -u tionis --password-stdin
+else
+    echo "DOCKER_PASSWORD not set, skipping login"
+fi
 echo "Building image for latest commit $CURRENT_COMMIT, last commit was $LAST_COMMIT"
 docker-build latest "$CURRENT_COMMIT" "$HEAD"
 
-LAST_TAG=$(<last_tag.txt)
+#LAST_TAG=$(<last_tag.txt)
 CURRENT_TAG=$(curl -L -s -H 'Accept: application/json' https://api.github.com/repos/janet-lang/janet/tags | jq -j .[0].name)
 
 #if [ "$LAST_TAG" == "$CURRENT_TAG" ]; then
