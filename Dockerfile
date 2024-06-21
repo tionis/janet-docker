@@ -43,7 +43,7 @@ RUN jpm install https://github.com/MorganPeterson/jermbox
 RUN jpm install https://github.com/andrewchambers/janet-big
 RUN jpm install https://github.com/tionis/remarkable
 RUN jpm install https://git.sr.ht/~pepe/chidi/
-RUN jpm install https://git.sr.ht/~pepe/gp/
 RUN jpm install https://github.com/MorganPeterson/jermbox
+RUN jpm install https://git.sr.ht/~pepe/gp/
 RUN jpm install https://github.com/tionis/jeff
 CMD ["janet"] 
